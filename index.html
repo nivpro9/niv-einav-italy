@@ -53,7 +53,18 @@
       תשעה לילות, מדינה אחת, ואנחנו שניים.<br>
       הטיול הזה הוא הפרק הבא בסיפור שלנו — ונרשום אותו כאן, יום אחר יום.
     </p>
-    <div class="hero-countdown reveal" id="heroCountdown"></div>
+    <div class="flight-timer reveal" id="flightTimer">
+      <p class="flight-timer-label" id="flightTimerLabel">עד הטיסה לנאפולי <span class="flag-it" aria-hidden="true"></span></p>
+      <div class="flight-timer-grid" id="flightTimerGrid">
+        <div class="timer-unit"><span class="timer-value" data-unit="days">00</span><span class="timer-caption">ימים</span></div>
+        <div class="timer-sep">:</div>
+        <div class="timer-unit"><span class="timer-value" data-unit="hours">00</span><span class="timer-caption">שעות</span></div>
+        <div class="timer-sep">:</div>
+        <div class="timer-unit"><span class="timer-value" data-unit="minutes">00</span><span class="timer-caption">דקות</span></div>
+        <div class="timer-sep">:</div>
+        <div class="timer-unit"><span class="timer-value" data-unit="seconds">00</span><span class="timer-caption">שניות</span></div>
+      </div>
+    </div>
     <a href="#timeline" class="hero-scroll" aria-label="גלול למטה">
       <span></span>
     </a>
@@ -67,7 +78,7 @@
     <p class="section-kicker reveal">משפט פתיחה</p>
     <h2 class="section-title reveal">ההרפתקה שלנו</h2>
     <p class="intro-text reveal">
-      <em>-- מקום לעדכון: שלחו לי משפט אישי ומרגש שתרצו שיפתח את הדף, ואחליף אותו כאן. --</em><br>
+      <em>-- מקום לעדכון: תעשו את זה בעצמכם, תוסיפו כאן משפט אישי ומרגש משלכם שיפתח את הדף. --</em><br>
       עד אז: איטליה מחכה לנו — עם היין, הים, הרחובות הישנים, ואינספור פעמים שנגיד "בואי נעצור רגע, זה יפה מדי".
     </p>
   </div>
@@ -163,7 +174,7 @@
   <div class="tips-grid">
     <div class="tips-card reveal">
       <h3 class="tips-card-title">🍝 מסעדות</h3>
-      <p class="tips-placeholder">-- מקום לעדכון: שלחו לי שמות של מסעדות שתרצו לשריין או שממליצים עליהן, ואוסיף אותן כאן עם המיקום שלהן. --</p>
+      <p class="tips-placeholder">-- מקום לעדכון: תעשו את זה בעצמכם, תוסיפו כאן שמות של מסעדות שתרצו לשריין או שממליצים עליהן. --</p>
     </div>
 
     <div class="tips-card reveal">
@@ -207,6 +218,6 @@
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="js/script.js?v=4" defer></script>
+<script src="js/script.js?v=6" defer></script>
 </body>
 </html>

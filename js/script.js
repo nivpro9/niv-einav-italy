@@ -6,6 +6,7 @@
 const TRIP_CONFIG = {
   startDate: '2026-09-01',
   endDate: '2026-09-10',
+  flightDateTime: '2026-09-01T11:00:00',
 };
 
 /* ===================================================================
@@ -17,9 +18,18 @@ const TRIP_DAYS = [
     date: '1.9', weekday: 'שלישי', city: 'napoli',
     title: 'טיסה + מעבר לרומא',
     tags: [{ text: 'טיסה W46924', type: 'flight' }, { text: 'רכבת Intercity 734', type: 'train' }, { text: 'לינה: רומא', type: 'stay' }],
-    logistics: [
-      'טיסה: תל אביב (TLV) 11:00 &larr; נאפולי (NAP) 13:30, טיסה W46924',
-      'רכבת: Napoli Centrale 16:31 &larr; Roma Termini 18:34, Intercity 734, 2&deg; Classe, מושבים 13A+13B, PNR B45GG5',
+    journeys: [
+      {
+        icon: '✈️', label: 'טיסה W46924',
+        from: { city: 'תל אביב', code: 'TLV', time: '11:00' },
+        to: { city: 'נאפולי', code: 'NAP', time: '13:30' },
+      },
+      {
+        icon: '🚄', label: 'רכבת',
+        from: { city: 'Napoli Centrale', code: '', time: '16:31' },
+        to: { city: 'Roma Termini', code: '', time: '18:34' },
+        extra: ['Intercity 734', '2&deg; Classe', 'מושבים: 13A+13B', 'PNR B45GG5'],
+      },
     ],
     blocks: [
       { label: 'ערב ברומא', items: ['🌊 מזרקת טרווי', '🏛️ פנתאון', '📍 פיאצה נאבונה', '🍝 ארוחת ערב איטלקית'] },
@@ -109,9 +119,13 @@ const TRIP_DAYS = [
     date: '10.9', weekday: 'חמישי', city: 'napoli',
     title: 'חזרה לישראל',
     tags: [{ text: 'טיסה W46923', type: 'flight' }],
-    logistics: [
-      'טיסה: נאפולי (NAP) 06:00 &larr; תל אביב (TLV) 10:00, טיסה W46923',
-      'יציאה לשדה: 03:30&ndash;04:00',
+    journeys: [
+      {
+        icon: '✈️', label: 'טיסה W46923',
+        from: { city: 'נאפולי', code: 'NAP', time: '06:00' },
+        to: { city: 'תל אביב', code: 'TLV', time: '10:00' },
+        extra: ['יציאה לשדה: <bdi>03:30&ndash;04:00</bdi>'],
+      },
     ],
     blocks: [],
     note: '✈️ הביתה — עם עוד סיפור ביחד',
@@ -151,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderRomanceMeter();
   initNav();
   initRevealAnimations();
-  initHeroCountdown();
+  initFlightTimer();
   initTallyCounters();
   initSingleCounter();
   initLightbox();
@@ -168,6 +182,29 @@ function hidePageLoader() {
   setTimeout(() => loader.classList.add('is-hidden'), 1500);
 }
 
+/* Renders a flight/train leg as stacked from/to rows so Latin codes and
+   times never sit inline with Hebrew text (avoids bidi reordering). */
+function renderJourney(j) {
+  const point = (p) => `
+    <div class="journey-row">
+      <bdi class="journey-city">${p.city}${p.code ? ` <span class="journey-code">${p.code}</span>` : ''}</bdi>
+      <bdi class="journey-time">${p.time}</bdi>
+    </div>
+  `;
+  const extraHtml = j.extra
+    ? `<div class="journey-extra">${j.extra.map(e => `<bdi class="journey-extra-chip">${e}</bdi>`).join('')}</div>`
+    : '';
+  return `
+    <div class="journey-card">
+      <div class="journey-head"><span class="journey-icon">${j.icon}</span><span class="journey-label">${j.label}</span></div>
+      ${point(j.from)}
+      <div class="journey-connector"></div>
+      ${point(j.to)}
+      ${extraHtml}
+    </div>
+  `;
+}
+
 /* ---------- Timeline ---------- */
 function renderTimeline() {
   const track = document.getElementById('timelineTrack');
@@ -179,8 +216,8 @@ function renderTimeline() {
         <ul class="day-list">${b.items.map(it => `<li>${it}</li>`).join('')}</ul>
       </div>
     `).join('');
-    const logisticsHtml = day.logistics
-      ? `<div class="day-logistics">${day.logistics.map(l => `<div>${l}</div>`).join('')}</div>`
+    const logisticsHtml = day.journeys
+      ? `<div class="day-logistics">${day.journeys.map(renderJourney).join('')}</div>`
       : '';
     const noteHtml = day.note ? `<div class="day-note">${day.note}</div>` : '';
 
@@ -339,24 +376,59 @@ function initRevealAnimations() {
   window.addEventListener('resize', revealVisible);
 }
 
-/* ---------- Hero countdown ---------- */
-function initHeroCountdown() {
-  const el = document.getElementById('heroCountdown');
-  const start = new Date(TRIP_CONFIG.startDate + 'T00:00:00');
+/* ---------- Live flight timer (days:hours:minutes:seconds) ---------- */
+function initFlightTimer() {
+  const wrap = document.getElementById('flightTimer');
+  const label = document.getElementById('flightTimerLabel');
+  const grid = document.getElementById('flightTimerGrid');
+  const flight = new Date(TRIP_CONFIG.flightDateTime);
   const end = new Date(TRIP_CONFIG.endDate + 'T23:59:59');
-  const now = new Date();
-
   const msPerDay = 1000 * 60 * 60 * 24;
 
-  if (now < start) {
-    const days = Math.ceil((start - now) / msPerDay);
-    el.innerHTML = `<strong>${days}</strong> ימים עד שיוצאים לאיטליה <span class="flag-it" aria-hidden="true"></span>`;
-  } else if (now >= start && now <= end) {
-    const dayNum = Math.min(TRIP_DAYS.length, Math.floor((now - start) / msPerDay) + 1);
-    el.innerHTML = `אנחנו באיטליה! <strong>יום ${dayNum}</strong> מתוך ${TRIP_DAYS.length} 🍷`;
-  } else {
-    el.innerHTML = `הטיול נגמר, אבל הזיכרונות נשארים <strong>לנצח</strong> ❤️`;
-  }
+  const values = {
+    days: grid.querySelector('[data-unit="days"]'),
+    hours: grid.querySelector('[data-unit="hours"]'),
+    minutes: grid.querySelector('[data-unit="minutes"]'),
+    seconds: grid.querySelector('[data-unit="seconds"]'),
+  };
+  const pad = (n) => String(n).padStart(2, '0');
+
+  let intervalId = null;
+
+  const showStaticMessage = (html) => {
+    if (intervalId) clearInterval(intervalId);
+    wrap.classList.add('is-live-note');
+    label.innerHTML = html;
+    grid.style.display = 'none';
+  };
+
+  const tick = () => {
+    const now = new Date();
+    const diff = flight - now;
+
+    if (diff <= 0) {
+      if (now <= end) {
+        const dayNum = Math.min(TRIP_DAYS.length, Math.floor((now - flight) / msPerDay) + 1);
+        showStaticMessage(`אנחנו באיטליה! <strong>יום ${dayNum}</strong> מתוך ${TRIP_DAYS.length} 🍷`);
+      } else {
+        showStaticMessage(`הטיול נגמר, אבל הזיכרונות נשארים <strong>לנצח</strong> ❤️`);
+      }
+      return;
+    }
+
+    const days = Math.floor(diff / msPerDay);
+    const hours = Math.floor((diff % msPerDay) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+    values.days.textContent = pad(days);
+    values.hours.textContent = pad(hours);
+    values.minutes.textContent = pad(minutes);
+    values.seconds.textContent = pad(seconds);
+  };
+
+  tick();
+  intervalId = setInterval(tick, 1000);
 }
 
 /* ---------- Tally counters (localStorage) ---------- */
