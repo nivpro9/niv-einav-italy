@@ -277,6 +277,16 @@ html[dir="rtl"] .hero-seam { clip-path: polygon(0 100%, 100% 100%, 0 30%, 0 100%
 .flight-timer.is-live-note .flight-timer-label { font-size: .98rem; }
 .flight-timer.is-live-note .flight-timer-label strong { font-family: var(--font-display); font-size: 1.4rem; color: var(--gold-light); }
 
+@media (max-width: 480px) {
+  .flight-timer { padding: 12px 12px 14px; gap: 8px; max-width: 100%; }
+  .flight-timer-grid { gap: 5px; }
+  .timer-unit { min-width: 48px; padding: 9px 3px 7px; border-radius: 11px; }
+  .timer-value { font-size: 1.4rem; }
+  .timer-caption { margin-top: 4px; padding-top: 4px; font-size: .56rem; }
+  .timer-sep { font-size: .85rem; margin-top: 14px; }
+  .flight-timer-label { font-size: .74rem; gap: 6px; }
+}
+
 .hero-scroll {
   position: absolute; bottom: 34px; inset-inline-start: 50%;
   transform: translateX(50%);
