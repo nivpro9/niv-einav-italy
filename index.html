@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Niv & Einav — Italian Adventure 🇮🇹</title>
+<meta name="description" content="יומן המסע הדיגיטלי של ניב ועינב באיטליה, 1–10 בספטמבר">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8D%B7%3C/text%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,600&family=Heebo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="page-loader" id="pageLoader" aria-hidden="true">
+  <div class="page-loader-heart">🍷</div>
+</div>
+
+<!-- ============ NAV ============ -->
+<nav class="site-nav" id="siteNav">
+  <div class="nav-inner">
+    <a href="#home" class="nav-brand">Niv <span class="amp">&amp;</span> Einav</a>
+    <button class="nav-toggle" id="navToggle" aria-label="פתח תפריט" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home" class="nav-link">ראשי</a></li>
+      <li><a href="#story" class="nav-link">הסיפור שלנו</a></li>
+      <li><a href="#timeline" class="nav-link">ציר הזמן</a></li>
+      <li><a href="#fun" class="nav-link">הפינה המצחיקה</a></li>
+      <li><a href="#map" class="nav-link">המסלול</a></li>
+      <li><a href="#tips" class="nav-link">המלצות</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero" id="home">
+  <div class="hero-bg">
+    <img src="images/couple/couple-24.jpg" alt="" class="hero-photo">
+    <div class="hero-overlay"></div>
+  </div>
+  <div class="hero-content">
+    <p class="hero-eyebrow reveal"><span class="flag-it" aria-hidden="true"></span> 1–10 בספטמבר <span class="flag-it" aria-hidden="true"></span></p>
+    <h1 class="hero-title reveal">Niv <span class="hero-amp">&amp;</span> Einav<br><span class="hero-title-sub">Italian Adventure</span></h1>
+    <p class="hero-tagline reveal">נאפולי ➜ רומא ➜ סורנטו ➜ פוזיטנו ➜ נאפולי</p>
+    <p class="hero-message reveal">
+      תשעה לילות, מדינה אחת, ואנחנו שניים.<br>
+      הטיול הזה הוא הפרק הבא בסיפור שלנו — ונרשום אותו כאן, יום אחר יום.
+    </p>
+    <div class="hero-countdown reveal" id="heroCountdown"></div>
+    <a href="#timeline" class="hero-scroll" aria-label="גלול למטה">
+      <span></span>
+    </a>
+  </div>
+  <div class="hero-seam" aria-hidden="true"></div>
+</header>
+
+<!-- ============ PERSONAL INTRO ============ -->
+<section class="intro" id="story">
+  <div class="section-inner intro-inner">
+    <p class="section-kicker reveal">משפט פתיחה</p>
+    <h2 class="section-title reveal">ההרפתקה שלנו</h2>
+    <p class="intro-text reveal">
+      <em>-- מקום לעדכון: שלחו לי משפט אישי ומרגש שתרצו שיפתח את הדף, ואחליף אותו כאן. --</em><br>
+      עד אז: איטליה מחכה לנו — עם היין, הים, הרחובות הישנים, ואינספור פעמים שנגיד "בואי נעצור רגע, זה יפה מדי".
+    </p>
+  </div>
+</section>
+
+<!-- ============ TIMELINE ============ -->
+<section class="timeline-section" id="timeline">
+  <div class="section-inner">
+    <p class="section-kicker reveal">יום אחר יום</p>
+    <h2 class="section-title reveal">ציר הזמן של הטיול</h2>
+    <p class="section-subtitle reveal">כל התכנון שלנו — טיסות, רכבות, לינות ורגעים שמחכים לקרות</p>
+  </div>
+  <div class="timeline-track" id="timelineTrack"></div>
+</section>
+
+<!-- ============ FUN ZONE ============ -->
+<section class="fun-section" id="fun">
+  <div class="section-inner">
+    <p class="section-kicker reveal">בלי לקחת יותר מדי ברצינות</p>
+    <h2 class="section-title reveal">הפינה המצחיקה שלנו</h2>
+    <p class="section-subtitle reveal">הבדיחות הפנימיות שלנו, עכשיו עם ספירה רשמית</p>
+  </div>
+
+  <div class="fun-grid">
+
+    <div class="fun-card reveal">
+      <h3 class="fun-card-title">🚄 מי יאחר לרכבת?</h3>
+      <p class="fun-card-desc">כל פעם שמישהו רץ ברגע האחרון — מוסיפים לו נקודה.</p>
+      <div class="tally" data-tally="late-train">
+        <div class="tally-person">
+          <span class="tally-name">ניב</span>
+          <span class="tally-score" data-side="a">0</span>
+          <button class="tally-btn" data-side="a">+1</button>
+        </div>
+        <div class="tally-vs">מול</div>
+        <div class="tally-person">
+          <span class="tally-name">עינב</span>
+          <span class="tally-score" data-side="b">0</span>
+          <button class="tally-btn" data-side="b">+1</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="fun-card reveal">
+      <h3 class="fun-card-title">🍕 כמה פיצות נאכל?</h3>
+      <p class="fun-card-desc">נאפולי, זו לא שאלה של אם — זו שאלה של כמה.</p>
+      <div class="counter-single" data-counter="pizza">
+        <button class="counter-btn" data-action="dec">−</button>
+        <span class="counter-value" data-value>0</span>
+        <button class="counter-btn" data-action="inc">+</button>
+      </div>
+    </div>
+
+    <div class="fun-card reveal">
+      <h3 class="fun-card-title">🥾 מי יתלונן ראשון על ההליכה?</h3>
+      <p class="fun-card-desc">הסמטאות בפוזיטנו יפות. גם תלולות.</p>
+      <div class="tally" data-tally="complain-walk">
+        <div class="tally-person">
+          <span class="tally-name">ניב</span>
+          <span class="tally-score" data-side="a">0</span>
+          <button class="tally-btn" data-side="a">+1</button>
+        </div>
+        <div class="tally-vs">מול</div>
+        <div class="tally-person">
+          <span class="tally-name">עינב</span>
+          <span class="tally-score" data-side="b">0</span>
+          <button class="tally-btn" data-side="b">+1</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="fun-card fun-card-wide reveal">
+      <h3 class="fun-card-title">❤️ מדד הרומנטיקה היומי</h3>
+      <p class="fun-card-desc">כל יום בטיול, דרגו מ-1 עד 5 לב כמה הוא היה רומנטי.</p>
+      <div class="romance-meter" id="romanceMeter"></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ MAP ============ -->
+<section class="map-section" id="map">
+  <div class="section-inner">
+    <p class="section-kicker reveal">המסלול שלנו</p>
+    <h2 class="section-title reveal">נאפולי ➜ רומא ➜ סורנטו ➜ פוזיטנו ➜ נאפולי</h2>
+    <p class="section-subtitle reveal">תשעה לילות דרך שלושה חופים ושתי ערים</p>
+  </div>
+  <div class="map-wrap reveal">
+    <div id="tripMap"></div>
+  </div>
+</section>
+
+<!-- ============ RECOMMENDATIONS ============ -->
+<section class="tips-section" id="tips">
+  <div class="section-inner">
+    <p class="section-kicker reveal">לפני שיוצאים</p>
+    <h2 class="section-title reveal">המלצות</h2>
+    <p class="section-subtitle reveal">מקומות שכבר יודעים עליהם, וכאלה שמחכים לעדכון</p>
+  </div>
+
+  <div class="tips-grid">
+    <div class="tips-card reveal">
+      <h3 class="tips-card-title">🍝 מסעדות</h3>
+      <p class="tips-placeholder">-- מקום לעדכון: שלחו לי שמות של מסעדות שתרצו לשריין או שממליצים עליהן, ואוסיף אותן כאן עם המיקום שלהן. --</p>
+    </div>
+
+    <div class="tips-card reveal">
+      <h3 class="tips-card-title">📍 חובה לראות</h3>
+      <ul class="tips-list">
+        <li>מזרקת טרווי, פנתאון ופיאצה נאבונה — רומא</li>
+        <li>הקולוסיאום והפורום הרומאי — רומא</li>
+        <li>המדרגות הספרדיות ו-Via del Corso — רומא</li>
+        <li>טרסטוורה בערב — רומא</li>
+        <li>Spaccanapoli וטיילת נאפולי</li>
+        <li>העיר העתיקה ו-Marina Grande — סורנטו</li>
+        <li>אנקאפרי, גני אוגוסטוס ו-Marina Piccola — קאפרי</li>
+        <li>פוזיטנו, אמלפי ורוולו — חוף אמלפי</li>
+      </ul>
+    </div>
+
+    <div class="tips-card reveal">
+      <h3 class="tips-card-title">💡 טיפים לזוגות</h3>
+      <ul class="tips-list">
+        <li>מתחלקים בניווט — כל אחד מוביל יום</li>
+        <li>תמיד משאירים זמן פנוי לתעות בסמטאות בלי תוכנית</li>
+        <li>עצירה לגלידה היא זכות יסוד, לא בזבוז זמן</li>
+        <li>שוקעים לפחות פעם ביחד בלי טלפונים</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer">
+  <p>Niv <span class="amp">&amp;</span> Einav <span class="flag-it footer-flag" aria-hidden="true"></span> <span id="footerYear"></span></p>
+  <p class="footer-sub">נעשה באהבה, לקראת המסע הכי טעים שלנו</p>
+</footer>
+
+<!-- ============ LIGHTBOX ============ -->
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <button class="lightbox-close" id="lightboxClose" aria-label="סגור">&times;</button>
+  <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="הקודם">&#8250;</button>
+  <img src="" alt="" class="lightbox-img" id="lightboxImg">
+  <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="הבא">&#8249;</button>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="js/script.js?v=3" defer></script>
+</body>
+</html>
