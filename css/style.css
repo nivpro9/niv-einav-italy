@@ -249,14 +249,30 @@ html[dir="rtl"] .hero-seam { clip-path: polygon(0 100%, 100% 100%, 0 30%, 0 100%
   margin: 0; font-size: .82rem; letter-spacing: .08em;
   color: var(--cream-dark); display: flex; align-items: center; gap: 8px;
 }
-.flight-timer-grid { display: flex; align-items: center; gap: 10px; direction: ltr; }
-.timer-unit { display: flex; flex-direction: column; align-items: center; min-width: 52px; }
-.timer-value {
-  font-family: var(--font-display); font-weight: 700; font-size: 2rem;
-  color: var(--gold-light); font-variant-numeric: tabular-nums; line-height: 1;
+.flight-timer-grid { display: flex; align-items: center; gap: 9px; direction: ltr; }
+.timer-unit {
+  display: flex; flex-direction: column; align-items: center;
+  min-width: 66px; padding: 14px 8px 10px;
+  background: linear-gradient(160deg, rgba(230,205,139,.16), rgba(109,31,46,.22));
+  border: 1px solid rgba(230,205,139,.4);
+  border-top: 3px solid var(--gold-light);
+  border-radius: 14px;
+  box-shadow: 0 10px 24px rgba(20,13,8,.3), inset 0 1px 0 rgba(255,255,255,.08);
 }
-.timer-caption { margin-top: 4px; font-size: .68rem; color: rgba(248,242,230,.75); }
-.timer-sep { font-family: var(--font-display); font-size: 1.6rem; color: rgba(248,242,230,.5); margin-top: -14px; }
+.timer-value {
+  font-family: var(--font-display); font-weight: 700; font-size: 2.1rem;
+  color: var(--gold-light); font-variant-numeric: tabular-nums; line-height: 1;
+  text-shadow: 0 2px 10px rgba(0,0,0,.35);
+}
+.timer-caption {
+  margin-top: 6px; font-size: .64rem; letter-spacing: .06em;
+  color: rgba(248,242,230,.8);
+  padding-top: 6px; border-top: 1px solid rgba(230,205,139,.25); width: 100%; text-align: center;
+}
+.timer-sep {
+  align-self: flex-start; margin-top: 24px;
+  font-size: 1.1rem; color: var(--gold-light); opacity: .55;
+}
 .flight-timer.is-live-note { padding: 14px 26px; }
 .flight-timer.is-live-note .flight-timer-label { font-size: .98rem; }
 .flight-timer.is-live-note .flight-timer-label strong { font-family: var(--font-display); font-size: 1.4rem; color: var(--gold-light); }
