@@ -129,11 +129,11 @@ const CITY_ILLUSTRATIONS = {
 };
 
 /* Photo pool (images/couple/) — one is used for the hero, the rest are spread across the timeline */
-const PHOTO_COUNT = 27;
+const PHOTO_COUNT = 28;
 const ALL_PHOTOS = Array.from({ length: PHOTO_COUNT }, (_, i) =>
   `images/couple/couple-${String(i + 1).padStart(2, '0')}.jpg`
 );
-const HERO_PHOTO = 'images/couple/couple-24.jpg';
+const HERO_PHOTO = 'images/couple/couple-28.jpg';
 const DAY_PHOTO_POOL = ALL_PHOTOS.filter(p => p !== HERO_PHOTO);
 
 /* Round-robin distribution so every day gets 2-3 real photos, in order */
