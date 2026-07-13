@@ -48,7 +48,7 @@ const TRIP_DAYS = [
   },
   {
     date: '3.9', weekday: 'חמישי', city: 'roma',
-    title: 'רומא ➜ נאפולי',
+    title: 'רומא ← נאפולי',
     tags: [{ text: 'רכבת לנאפולי', type: 'train' }, { text: 'לינה: נאפולי', type: 'stay' }],
     blocks: [
       { label: 'בוקר', items: ['☕ השלמות אחרונות ברומא', '🚄 רכבת לנאפולי'] },
@@ -58,7 +58,7 @@ const TRIP_DAYS = [
   },
   {
     date: '4.9', weekday: 'שישי', city: 'sorrento',
-    title: 'נאפולי ➜ סורנטו',
+    title: 'נאפולי ← סורנטו',
     tags: [{ text: 'רכבת לסורנטו', type: 'train' }, { text: 'לינה: סורנטו', type: 'stay' }],
     blocks: [
       { label: 'בוקר', items: ['🚆 מעבר לסורנטו'] },
@@ -97,7 +97,7 @@ const TRIP_DAYS = [
   },
   {
     date: '8.9', weekday: 'שלישי', city: 'positano',
-    title: 'סורנטו ➜ פוזיטנו',
+    title: 'סורנטו ← פוזיטנו',
     tags: [{ text: 'מעבר לפוזיטנו', type: 'train' }, { text: 'לינה: פוזיטנו', type: 'stay' }],
     blocks: [
       { label: 'יום בפוזיטנו', items: ['🌊 חוף', '📸 סמטאות העיר', '🌅 שקיעה', '🍝 ארוחת ערב מול הנוף'] },
@@ -106,7 +106,7 @@ const TRIP_DAYS = [
   },
   {
     date: '9.9', weekday: 'רביעי', city: 'napoli',
-    title: 'פוזיטנו ➜ נאפולי',
+    title: 'פוזיטנו ← נאפולי',
     tags: [{ text: 'מעבר לנאפולי', type: 'train' }, { text: 'לינה: נאפולי', type: 'stay' }],
     blocks: [
       { label: 'בוקר רגוע בפוזיטנו', items: ['☕ קפה מול הים', '📸 תמונות אחרונות'] },
@@ -261,9 +261,6 @@ function renderTimeline() {
         <div class="day-visual">
           <div class="day-badge" title="${day.title}">${CITY_ILLUSTRATIONS[day.city] || ''}</div>
           <div class="day-mosaic">${mosaicHtml}</div>
-          <div class="day-photo-slot" data-day-photo="${i + 1}">
-            📷 כשנחזור מאיטליה — כאן ייכנסו תמונות אמיתיות מהיום הזה (images/days/day${i + 1}.jpg)
-          </div>
         </div>
         <div class="day-body">
           <span class="day-ghost-num">${i + 1}</span>
@@ -280,27 +277,12 @@ function renderTimeline() {
   }).join('');
 
   track.innerHTML = html;
-  applyDayPhotoFallbacks();
 
   track.querySelectorAll('.mosaic-photo').forEach(el => {
     el.addEventListener('click', () => {
       const idx = DAY_PHOTO_POOL.indexOf(el.dataset.lightboxSrc);
       openLightbox(idx);
     });
-  });
-}
-
-/* Auto-swap a day's placeholder for a real photo if the file exists */
-function applyDayPhotoFallbacks() {
-  document.querySelectorAll('[data-day-photo]').forEach(slot => {
-    const dayNum = slot.getAttribute('data-day-photo');
-    const src = `images/days/day${dayNum}.jpg`;
-    const probe = new Image();
-    probe.onload = () => {
-      slot.classList.add('has-photo');
-      slot.innerHTML = `<img src="${src}" alt="תמונה מיום ${dayNum}" loading="lazy">`;
-    };
-    probe.src = src;
   });
 }
 
