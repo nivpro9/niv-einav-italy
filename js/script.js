@@ -150,6 +150,33 @@ const ALL_PHOTOS = Array.from({ length: PHOTO_COUNT }, (_, i) =>
 const HERO_PHOTO = 'images/couple/couple-28.jpg';
 const DAY_PHOTO_POOL = ALL_PHOTOS.filter(p => p !== HERO_PHOTO);
 
+/* ===================================================================
+   SURPRISE BOXES — 20-card truth-or-dare, mix of sweet / funny / spicy.
+   Edit freely; opened state is remembered per-box in localStorage.
+=================================================================== */
+const SURPRISE_BOXES = [
+  { icon: '💌', text: 'ספרו זה לזה על הרגע שידעתם שזה זה. בלי לקצר.' },
+  { icon: '😂', text: 'מה הדבר הכי מצחיק שקרה לנו ביחד עד היום?' },
+  { icon: '💃', text: 'רקדו יחד לשיר איטלקי במשך דקה שלמה — גם בלי מוזיקה ברקע.' },
+  { icon: '👀', text: 'מה התכונה שהכי משגעת אותך אצל השני/ה, ואיך למדת לאהוב אותה?' },
+  { icon: '💋', text: 'נשיקה של 10 שניות, בלי לצחוק. עכשיו.' },
+  { icon: '🤳', text: 'תפסו סלפי ממש מצחיק ברגע זה, ותשמרו אותו לתמיד.' },
+  { icon: '🗣️', text: '"Ti amo" — תגידו את זה אחד לשני באיטלקית, בלי לצחוק (מותר לנסות כמה פעמים).' },
+  { icon: '🧭', text: 'מי מכם יותר טוב בניווט? תנו נקודה אחד לשני, ותסבירו למה — בלי לריב.' },
+  { icon: '🔥', text: 'מה הדבר שהכי מדליק אצלך את השני/ה? תגידו בקול.' },
+  { icon: '🎭', text: 'חקו אחד את השני למשך 30 שניות — התנועות, הקול, הכל.' },
+  { icon: '🤫', text: 'איזה כינוי מצחיק אתם קוראים אחד לשני שאף אחד אחר לא יודע עליו?' },
+  { icon: '🍕', text: 'תחרות: מי אוכל פרוסת פיצה מהר יותר. עכשיו.' },
+  { icon: '🌅', text: 'מה החלום המשותף הכי גדול שלכם לעתיד? ספרו אותו כאילו הוא כבר קרה.' },
+  { icon: '🙈', text: 'מה הדבר הכי מוזר שאחד מכם עשה בדייט הראשון?' },
+  { icon: '🤝', text: 'החזיקו ידיים ותספרו ביחד עד 60 — בלי לדבר על שום דבר אחר.' },
+  { icon: '💭', text: 'תלחשו אחד לשני משהו שלא אמרתם כבר מזמן.' },
+  { icon: '🏆', text: 'מי ינצח בטיול הזה בכל תחרות שולית אפשרית? תכריזו על מדליית זהב מראש.' },
+  { icon: '📸', text: 'תמצאו את הנוף הכי יפה שאתם רואים עכשיו ותצטלמו בו, בלי לחשוב יותר מדי.' },
+  { icon: '💞', text: 'מה הרגע הכי רומנטי שהיה בינינו עד עכשיו — לא בטיול הזה, בחיים בכלל?' },
+  { icon: '🥂', text: 'הרימו כוסית (או כל דבר שיש ביד) ותגידו ברכה קצרה אחד לשני.' },
+];
+
 /* Round-robin distribution so every day gets 2-3 real photos, in order */
 function photosForDay(dayIndex) {
   return DAY_PHOTO_POOL.filter((_, i) => i % TRIP_DAYS.length === dayIndex);
@@ -163,6 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelector('.hero-photo').src = HERO_PHOTO;
   renderTimeline();
   renderRomanceMeter();
+  renderSurpriseBoxes();
   initNav();
   initRevealAnimations();
   initFlightTimer();
@@ -303,6 +331,37 @@ function renderRomanceMeter() {
         localStorage.setItem('romanceMeter', JSON.stringify(current));
         paint(current[date]);
       });
+    });
+  });
+}
+
+/* ---------- Surprise boxes (flip-open truth-or-dare cards) ---------- */
+function renderSurpriseBoxes() {
+  const grid = document.getElementById('boxesGrid');
+  const opened = new Set(JSON.parse(localStorage.getItem('openedBoxes') || '[]'));
+
+  grid.innerHTML = SURPRISE_BOXES.map((box, i) => `
+    <button class="surprise-box ${opened.has(i) ? 'is-open' : ''}" data-index="${i}" type="button" aria-label="קופסה ${i + 1}">
+      <span class="surprise-box-inner">
+        <span class="surprise-box-face surprise-box-front">
+          <span class="surprise-box-icon">🎁</span>
+          <span class="surprise-box-num">${i + 1}</span>
+        </span>
+        <span class="surprise-box-face surprise-box-back">
+          <span class="surprise-box-back-icon">${box.icon}</span>
+          <span class="surprise-box-text">${box.text}</span>
+        </span>
+      </span>
+    </button>
+  `).join('');
+
+  grid.querySelectorAll('.surprise-box').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = Number(btn.dataset.index);
+      btn.classList.add('is-open');
+      const current = new Set(JSON.parse(localStorage.getItem('openedBoxes') || '[]'));
+      current.add(idx);
+      localStorage.setItem('openedBoxes', JSON.stringify([...current]));
     });
   });
 }

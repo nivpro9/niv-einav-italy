@@ -533,6 +533,60 @@ html[dir="rtl"] .day-card::before { transform: translateX(50%); }
 .romance-heart.is-active { filter: grayscale(0) opacity(1); }
 
 /* =====================================================
+   SURPRISE BOXES
+===================================================== */
+.boxes-section { background: var(--cream); }
+.boxes-grid {
+  max-width: 980px; margin: 50px auto 0; padding: 0 24px 20px;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(115px, 1fr));
+  gap: 16px;
+}
+.surprise-box {
+  perspective: 1200px; aspect-ratio: 3/4;
+  background: none; border: none; padding: 0; margin: 0;
+  font-family: inherit;
+}
+.surprise-box-inner {
+  display: block;
+  position: relative; width: 100%; height: 100%;
+  transition: transform .7s cubic-bezier(.34,1.4,.4,1);
+  transform-style: preserve-3d; -webkit-transform-style: preserve-3d;
+  will-change: transform;
+}
+.surprise-box.is-open .surprise-box-inner { transform: rotateY(180deg); -webkit-transform: rotateY(180deg); }
+.surprise-box:not(.is-open) .surprise-box-front { animation: boxGlow 3.5s ease-in-out infinite; }
+
+.surprise-box-face {
+  position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  border-radius: 14px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 10px; text-align: center;
+}
+.surprise-box-front {
+  background: linear-gradient(160deg, var(--wine), var(--coffee) 75%);
+  border: 2px solid var(--gold);
+  box-shadow: var(--shadow-soft);
+  transform: rotateY(0deg); -webkit-transform: rotateY(0deg);
+}
+.surprise-box-icon { font-size: 1.7rem; }
+.surprise-box-num {
+  font-family: var(--font-display); color: var(--gold-light); font-weight: 700;
+  margin-top: 6px; font-size: 1.05rem;
+}
+.surprise-box-back {
+  background: var(--paper);
+  border: 2px solid var(--gold);
+  transform: rotateY(180deg); -webkit-transform: rotateY(180deg);
+  box-shadow: var(--shadow-soft);
+}
+.surprise-box-back-icon { font-size: 1.4rem; margin-bottom: 8px; }
+.surprise-box-text { font-size: .74rem; color: var(--coffee); line-height: 1.45; }
+
+@keyframes boxGlow {
+  0%, 100% { box-shadow: var(--shadow-soft); }
+  50% { box-shadow: 0 10px 30px rgba(201,162,75,.45); }
+}
+
+/* =====================================================
    MAP
 ===================================================== */
 .map-section { background: var(--paper); }
